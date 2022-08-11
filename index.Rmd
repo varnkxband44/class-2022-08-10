@@ -11,16 +11,15 @@ library(tidyverse)
 ```
 
 
-```{r}
-ec <- read_rds("ec.rds")
+```{r, clean_data}
+#Specific columns in the direct data sets are yet to be selected. This is unlike the previously given ec.rds file, which had pre-filtered out the columns from the direct data set for a cleaner look at the data for us.
+ec <- read_rds(file = "clean_data.rds")
 ```
 
 
 ```{r}
 # Look at missing data later.
-
 ec |> 
-  drop_na() |> 
   ggplot(aes(x = pop2018, y = ec_county)) +
     geom_point() +
     geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
@@ -34,11 +33,8 @@ ec |>
 ```
 
 
-
 ```{r}
 ec |> 
-  drop_na() |> 
-  mutate(state = str_remove(county_name, ".*, ")) |> 
   group_by(state) |> 
   summarise(pop_state = sum(pop2018),
             avg_ec = mean(ec_county)) |> 
@@ -51,6 +47,5 @@ ec |>
          x = "State Population",
          title = "Economic Connectedness and Population in US States",
          subtitle = "Biggger states have counties with lower average economic connectedness.")
-
 
 ```
